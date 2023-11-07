@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Start",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/out/bot.js",
+      "outFiles": [
+        "${workspaceFolder}/**/*.js"
+      ],
+      "cwd": "${workspaceFolder}/out"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "botory",
+  "version": "1.0.0",
+  "author": "KrHanwoo",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.13.0"
+  }
+}
