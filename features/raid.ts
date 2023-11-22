@@ -87,7 +87,7 @@ async function endRaid(prize: number) {
   Raid.msg?.edit({ embeds: [embed], components: [] });
   Raid.msg = null;
   rewards.forEach((v, k) => {
-    moneyStorage.updateOne({ _id: new ObjectId(k) }, { $inc: { money: v } }, { upsert: true });
+    moneyStorage.updateOne({ member: k }, { $inc: { money: v } }, { upsert: true });
   });
 }
 
@@ -96,7 +96,7 @@ function joinRaiders(raiders: GuildMember[]) {
 }
 
 async function setLastRaid() {
-  await raidStorage.updateOne(lastRaidField, { lastRaid: Date.now() }, { upsert: true });
+  await raidStorage.replaceOne(lastRaidField, { lastRaid: Date.now() }, { upsert: true });
 }
 
 async function calculatePrize() {
