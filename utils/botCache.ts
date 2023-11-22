@@ -1,11 +1,14 @@
-import { Guild, GuildTextBasedChannel } from 'discord.js';
+import { Guild, GuildChannel, GuildTextBasedChannel, TextChannel } from 'discord.js';
 import { Bot } from '../bot';
 
+export class BotCache {
+  static guild: Guild;
+  static general: GuildTextBasedChannel;
 
-export const BotCache = {
-
-  async init() {
-
+  static async init() {
+    this.guild = await Bot.client.guilds.fetch(Bot.config.guild);
+    this.general = await getChannel(Bot.config.channel.general);
+    console.log('Channels fetched');
   }
 }
 

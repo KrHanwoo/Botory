@@ -4,16 +4,16 @@ import { Bot } from '../bot';
 let client;
 let db: Db;
 
-export const Database = {
+export class Database {
 
-  async init() {
+  static async init() {
     client = new MongoClient(Bot.config.db);
     await client.connect();
     db = client.db('Botory');
     await db.command({ ping: 1 });
-  },
+  }
 
-  get(name: string) {
+  static get(name: string) {
     return db.collection(name);
   }
 }

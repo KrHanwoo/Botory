@@ -17,9 +17,9 @@ declare module 'discord.js' {
   }
 }
 
-export const ExtUtil = {
+export class ExtUtil {
   
-  init() {
+  static init() {
     EmbedBuilder.prototype.setUser = function (author: User, showTag: boolean = true): EmbedBuilder {
       return this.setAuthor({
         name: showTag ? author.tag : author.username, iconURL: author.displayAvatarURL()

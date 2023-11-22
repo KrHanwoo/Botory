@@ -5,9 +5,9 @@ import { Util } from './util';
 
 const map = new Map();
 
-export const InteractionHandler = {
+export class InteractionHandler {
 
-  async init() {
+  static async init() {
     console.log('Registering commands');
     const commands = Bot.client.application?.commands;
     if (!commands) throw Error('Failed to get command manager');
