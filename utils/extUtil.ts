@@ -1,4 +1,5 @@
-import { BaseChannel, BaseInteraction, EmbedBuilder, InteractionResponse, User } from 'discord.js';
+import { BaseInteraction, EmbedBuilder, InteractionResponse, User } from 'discord.js';
+import { Bot } from '../bot';
 type replyType = Promise<InteractionResponse<boolean> | undefined>;
 type optionalString = string | null | undefined;
 
@@ -14,6 +15,10 @@ declare module 'discord.js' {
     success(message: string, ephemeral?: boolean): replyType;
     info(message: string, ephemeral?: boolean): replyType;
     na(): replyType;
+  }
+
+  interface User{
+    isSelf(): boolean;
   }
 }
 
@@ -45,6 +50,10 @@ export class ExtUtil {
     
     BaseInteraction.prototype.na = async function () {
       return reply(this, '사용할 수 없습니다', true, 0xff5c5c);
+    };
+
+    User.prototype.isSelf = function () {
+      return this.id == Bot.client.user?.id;
     };
   }
 }
