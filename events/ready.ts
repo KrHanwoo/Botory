@@ -4,8 +4,8 @@ import { InteractionHandler } from '../utils/interactionHandler.js';
 module.exports = {
   event: 'ready',
   async execute() {
-    await BotCache.initialize();
-    await InteractionHandler.register();
+    await BotCache.init();
+    await InteractionHandler.init();
     
     console.log('Bot is ready!');
   }

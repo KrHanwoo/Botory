@@ -3,6 +3,7 @@ import config from './config.json';
 import fs from 'fs';
 import { ExtUtil } from './utils/extUtil';
 import { Util } from './utils/util';
+import { Database } from './utils/database';
 
 const client = new Discord.Client({
   intents: [
@@ -15,11 +16,11 @@ const client = new Discord.Client({
 });
 
 export const Bot = {
-  config : config,
-  client : client
+  config: config,
+  client: client
 }
 
-ExtUtil.initialize();
+ExtUtil.init();
 
 fs.readdirSync('./events').filter(Util.isScript).forEach(f => {
   const event = require(`./events/${f}`);
@@ -28,6 +29,8 @@ fs.readdirSync('./events').filter(Util.isScript).forEach(f => {
 
 (async () => {
   console.log(new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }));
+  await Database.init();
+  console.log('Connected to Database');
   await client.login(config.token);
   console.log(`Logged as ${Bot.client.user?.username}`);
 })();

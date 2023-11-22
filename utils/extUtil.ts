@@ -1,4 +1,4 @@
-import { BaseInteraction, EmbedBuilder, InteractionResponse, User } from "discord.js";
+import { BaseChannel, BaseInteraction, EmbedBuilder, InteractionResponse, User } from 'discord.js';
 type replyType = Promise<InteractionResponse<boolean> | undefined>;
 type optionalString = string | null | undefined;
 
@@ -13,12 +13,13 @@ declare module 'discord.js' {
     err(message: string, ephemeral?: boolean): replyType;
     success(message: string, ephemeral?: boolean): replyType;
     info(message: string, ephemeral?: boolean): replyType;
+    na(): replyType;
   }
 }
 
 export const ExtUtil = {
   
-  initialize() {
+  init() {
     EmbedBuilder.prototype.setUser = function (author: User, showTag: boolean = true): EmbedBuilder {
       return this.setAuthor({
         name: showTag ? author.tag : author.username, iconURL: author.displayAvatarURL()
@@ -39,7 +40,11 @@ export const ExtUtil = {
     };
 
     BaseInteraction.prototype.info = async function (message: string, ephemeral: boolean = true) {
-      return reply(this, message, ephemeral, 0x676767);
+      return reply(this, message, ephemeral, 0x1e1f22);
+    };
+    
+    BaseInteraction.prototype.na = async function () {
+      return reply(this, '사용할 수 없습니다', true, 0xff5c5c);
     };
   }
 }

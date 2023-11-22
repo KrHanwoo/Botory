@@ -1,10 +1,10 @@
-import { Guild, GuildTextBasedChannel } from "discord.js";
-import { Bot } from "../bot";
+import { Guild, GuildTextBasedChannel } from 'discord.js';
+import { Bot } from '../bot';
 
 
 export const BotCache = {
 
-  async initialize() {
+  async init() {
 
   }
 }
