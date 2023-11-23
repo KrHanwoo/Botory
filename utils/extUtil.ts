@@ -17,13 +17,13 @@ declare module 'discord.js' {
     na(): replyType;
   }
 
-  interface User{
+  interface User {
     isSelf(): boolean;
   }
 }
 
 export class ExtUtil {
-  
+
   static init() {
     EmbedBuilder.prototype.setUser = function (author: User, showTag: boolean = true): EmbedBuilder {
       return this.setAuthor({
@@ -45,9 +45,9 @@ export class ExtUtil {
     };
 
     BaseInteraction.prototype.info = async function (message: string, ephemeral: boolean = true) {
-      return reply(this, message, ephemeral, 0x1e1f22);
+      return reply(this, message, ephemeral);
     };
-    
+
     BaseInteraction.prototype.na = async function () {
       return reply(this, '사용할 수 없습니다', true, 0xff5c5c);
     };
@@ -58,11 +58,11 @@ export class ExtUtil {
   }
 }
 
-function reply(interaction: BaseInteraction, message: string, ephemeral: boolean, color: number) {
+function reply(interaction: BaseInteraction, message: string, ephemeral: boolean, color?: number) {
   if (!interaction.isRepliable()) return;
   let embed = new EmbedBuilder()
-    .setDescription(message)
-    .setColor(color);
+    .setDescription(message);
+  if (color) embed.setColor(color);
   return interaction.reply({
     embeds: [embed],
     ephemeral: ephemeral

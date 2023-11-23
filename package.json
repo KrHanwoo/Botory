@@ -4,6 +4,7 @@
   "author": "KrHanwoo",
   "license": "MIT",
   "dependencies": {
+    "canvas": "^2.11.2",
     "discord.js": "^14.14.1",
     "mongodb": "^6.3.0"
   }

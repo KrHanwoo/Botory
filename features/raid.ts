@@ -3,11 +3,11 @@ import { BotCache } from '../utils/botCache';
 import { Database } from '../utils/database';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildMember, Message, escapeMarkdown } from 'discord.js';
 import { Util } from '../utils/util';
+import { Money } from '../utils/money';
 
 const lastRaidField = { lastRaid: { $exists: true } };
 
-let raidStorage: Collection<Document>;
-let moneyStorage: Collection<Document>;
+let storage: Collection<Document>;
 
 export class Raid {
   static running = false;
@@ -15,8 +15,7 @@ export class Raid {
   static raiders: GuildMember[] = [];
 
   static async init() {
-    raidStorage = Database.get('raid');
-    moneyStorage = Database.get('money');
+    storage = Database.get('raid');
     setInterval(checkRaid, 180 * 1000);
   }
 
@@ -52,6 +51,7 @@ async function endRaid(prize: number) {
     else embed.setDescription(`아무도 레이드를 성공하지 못했습니다!\n무려 ${prize}개짜리였는데!`);
     Raid.msg?.edit({ embeds: [embed], components: [] });
     Raid.msg = null;
+    Raid.raiders = [];
     return;
   }
 
@@ -86,8 +86,9 @@ async function endRaid(prize: number) {
 
   Raid.msg?.edit({ embeds: [embed], components: [] });
   Raid.msg = null;
+  Raid.raiders = [];
   rewards.forEach((v, k) => {
-    moneyStorage.updateOne({ member: k }, { $inc: { money: v } }, { upsert: true });
+    Money.addMoney(k, v);
   });
 }
 
@@ -96,11 +97,11 @@ function joinRaiders(raiders: GuildMember[]) {
 }
 
 async function setLastRaid() {
-  await raidStorage.replaceOne(lastRaidField, { lastRaid: Date.now() }, { upsert: true });
+  await storage.replaceOne(lastRaidField, { lastRaid: Date.now() }, { upsert: true });
 }
 
 async function calculatePrize() {
-  let doc = await raidStorage.findOne({ lastRaid: { $exists: true } });
+  let doc = await storage.findOne({ lastRaid: { $exists: true } });
   if (!doc || !doc.lastRaid) return 2000;
   let diff = (Date.now() - doc.lastRaid) / 1000 / 3600;
   return Math.max(Math.floor(diff * 4000), 2000);
