@@ -1,3 +1,4 @@
+import { Image } from "canvas";
 
 const lookup = [
   { value: 1, symbol: '' },
@@ -28,5 +29,18 @@ export class Util {
   static formatNumber(num: number, digits: number) {
     let item = lookup.slice().reverse().find(x => num >= x.value);
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0';
+  }
+
+  static currentDate(){
+    return new Date().toISOString().split('T')[0];
+  }
+
+  static async getImage(url: string){
+    let img = new Image();
+    await new Promise(r => {
+      img.onload = () => { r(null); };
+      img.src = url;
+    });
+    return img;
   }
 }

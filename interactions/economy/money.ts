@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction, GuildMember, SlashCommandBuilder } from 'discord.js';
 import { Money } from '../../utils/money';
 import { RankFrame } from '../../utils/rankFrame';
+import { Util } from '../../utils/util';
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -17,9 +18,8 @@ module.exports = {
     if (!member || !(member instanceof GuildMember)) return cmd.na();
 
     let info = await Money.getInfo(member.id);
-    let avatar = member.displayAvatarURL({ size: 128, extension: "png" });
-    let canvas = await RankFrame.createMoneyFrame(member.displayName, info.money, info.rank, avatar);
-    let filename = `${member.id}_${new Date().toISOString().split('T')[0]}.png`;
+    let canvas = await RankFrame.createMoneyFrame(member, info.money, info.rank);
+    let filename = `${member.id}_${Util.currentDate()}.png`;
     cmd.reply({
       files: [{ attachment: canvas.toBuffer(), name: filename }],
       ephemeral: true

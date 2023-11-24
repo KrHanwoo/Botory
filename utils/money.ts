@@ -27,4 +27,10 @@ export class Money {
     return { rank: rank, money: money };
   }
 
+  static async getRankings() {
+    let docs = await storage.find().toArray();
+    docs = docs.sort((a, b) => b.money - a.money).slice(0,20);
+    return docs;
+  }
+
 }

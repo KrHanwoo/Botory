@@ -1,5 +1,6 @@
 import { BaseInteraction, EmbedBuilder, InteractionResponse, User } from 'discord.js';
 import { Bot } from '../bot';
+import { CanvasRenderingContext2D } from 'canvas';
 type replyType = Promise<InteractionResponse<boolean> | undefined>;
 type optionalString = string | null | undefined;
 
@@ -21,6 +22,13 @@ declare module 'discord.js' {
     isSelf(): boolean;
   }
 }
+
+declare module 'canvas' {
+  interface CanvasRenderingContext2D {
+    style(style?: { fill: string, stroke?: string, thickness?: number, font?: string }): void;
+  }
+}
+
 
 export class ExtUtil {
 
@@ -55,6 +63,14 @@ export class ExtUtil {
     User.prototype.isSelf = function () {
       return this.id == Bot.client.user?.id;
     };
+
+    CanvasRenderingContext2D.prototype.style = function (style?: { fill?: string, stroke?: string, thickness?: number, font?: string }) {
+      this.beginPath();
+      this.fillStyle = style?.fill ?? '';
+      this.strokeStyle = style?.stroke ?? '';
+      this.lineWidth = style?.thickness ?? 0;
+      this.font = style?.font ?? '';
+    }
   }
 }
 
