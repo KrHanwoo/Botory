@@ -12,7 +12,8 @@ export class Rank {
 
 async function updateRank() {
   let canvas = await RankFrame.createMoneyTable();
-  BotCache.rank.send({
-    files: [{ attachment: canvas.toBuffer(), name: `rank_${Util.currentDate()}.png` }]
-  });
+  let data = { files: [{ attachment: canvas.toBuffer(), name: `rank_${Util.currentDate()}.png` }] };
+  let last = (await BotCache.rank.messages.fetch({ limit: 1 })).at(0);
+  if (!last || !last.editable) BotCache.rank.send(data);
+  else last.edit(data);
 }
