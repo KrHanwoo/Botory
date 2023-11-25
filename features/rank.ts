@@ -14,11 +14,11 @@ export class Rank {
 
 async function updateRank() {
   let rankings = await Money.getRankings();
-  
+
   let rich = Bot.config.role.rich;
   const role = await BotCache.guild.roles.fetch(rich);
   if (role) {
-    let eligible = rankings.slice(0, 10);
+    let eligible = rankings.slice(0, 5);
     let roleRemove = role.members.filter(m => !eligible.some(x => x.member == m.id));
     let roleAdd = eligible.filter(r => !role.members.some(x => x.id == r.member));
     for(let pair of roleRemove){
