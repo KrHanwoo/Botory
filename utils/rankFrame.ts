@@ -3,6 +3,7 @@ import { Util } from "./util";
 import { GuildMember } from "discord.js";
 import { Money } from "./money";
 import { BotCache } from "./botCache";
+import { Document, WithId } from "mongodb";
 
 const font = 'Pretendard';
 
@@ -52,11 +53,10 @@ export class RankFrame {
   }
 
 
-  static async createMoneyTable() {
+  static async createMoneyTable(rankings: WithId<Document>[]) {
     const canvas = createCanvas(2980, 2820);
     const ctx = canvas.getContext('2d');
 
-    let rankings = await Money.getRankings();
     let i = 0;
     let memberManager = BotCache.guild.members;
     for (let r of rankings) {
