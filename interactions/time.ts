@@ -8,7 +8,7 @@ module.exports = {
     let embed = new EmbedBuilder()
       .addField(getTime('KST', 9), '한국 표준시')
       .addField(getTime('PST', -8), listMentions('793028538021838869'))
-      .addField(getTime('EDT', -4), listMentions('725249696439992321'))
+      .addField(getTime('EST', -5), listMentions('725249696439992321'))
       .addField(getTime('CST', -6), listMentions('290408959649644544'))
       .addField(getTime('GMT', 0), listMentions('567643576830525443'));
     cmd.reply({ embeds: [embed], ephemeral: true });
