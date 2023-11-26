@@ -1,7 +1,7 @@
 import { Collection, Document } from 'mongodb';
 import { BotCache } from '../utils/botCache';
 import { Database } from '../utils/database';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, GuildMember, Message, escapeMarkdown } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, escapeMarkdown } from 'discord.js';
 import { Util } from '../utils/util';
 import { Money } from '../utils/money';
 
@@ -19,7 +19,7 @@ export class Raid {
     setInterval(checkRaid, 180 * 1000);
   }
 
-  static async startRaid(prize: number) {
+  static async startRaid(prize: number, interaction?: ChatInputCommandInteraction) {
     let embed = new EmbedBuilder()
       .setTitle('도토리 레이드 도착!')
       .setDescription(`15초 안에 아래 버튼을 눌러서 도토리 ${prize}개를 받으세요!`);
@@ -28,16 +28,24 @@ export class Raid {
       .setLabel('레이드 받기').setStyle(ButtonStyle.Primary);
     let row = new ActionRowBuilder<ButtonBuilder>().addComponents(btn);
     Raid.running = true;
-    Raid.msg = await BotCache.general.send({ embeds: [embed], components: [row] });
+    if (interaction) Raid.msg = await interaction.editReply({ embeds: [embed], components: [row] });
+    else Raid.msg = await BotCache.general.send({ embeds: [embed], components: [row] });
     await Util.delay(15 * 1000);
     endRaid(prize);
+  }
+
+  static async calculatePrize() {
+    let doc = await storage.findOne({ lastRaid: { $exists: true } });
+    if (!doc || !doc.lastRaid) return 2000;
+    let diff = (Date.now() - doc.lastRaid) / 1000 / 3600;
+    return Math.max(Math.floor(diff * 4000), 2000);
   }
 }
 
 async function checkRaid() {
   if (Math.random() >= 0.1) return;
   if (BotCache.general.lastMessage?.author.isSelf()) return;
-  let prize = await calculatePrize();
+  let prize = await Raid.calculatePrize();
   Raid.startRaid(prize);
 }
 
@@ -98,11 +106,4 @@ function joinRaiders(raiders: GuildMember[]) {
 
 async function setLastRaid() {
   await storage.replaceOne(lastRaidField, { lastRaid: Date.now() }, { upsert: true });
-}
-
-async function calculatePrize() {
-  let doc = await storage.findOne({ lastRaid: { $exists: true } });
-  if (!doc || !doc.lastRaid) return 2000;
-  let diff = (Date.now() - doc.lastRaid) / 1000 / 3600;
-  return Math.max(Math.floor(diff * 4000), 2000);
 }
