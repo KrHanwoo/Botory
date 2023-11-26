@@ -33,7 +33,11 @@ export class InteractionHandler {
     Bot.client.on('interactionCreate', async (interaction: any) => {
       let key = interaction.commandName ?? interaction.customId;
       let fn = map.get(key);
-      if (fn) fn(interaction);
+      try{
+        if (fn) fn(interaction);
+      }catch(e){
+        
+      }
     });
 
     console.log('Commands registerd');
