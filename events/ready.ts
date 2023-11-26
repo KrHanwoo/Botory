@@ -13,6 +13,5 @@ module.exports = {
     Raid.init();
     
     console.log('Bot is ready!');
-
   }
 };
