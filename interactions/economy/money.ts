@@ -21,9 +21,8 @@ module.exports = {
     let info = await Money.getInfo(member.id);
     let canvas = await RankFrame.createMoneyFrame(member, info.money, info.rank);
     let filename = `${member.id}_${Util.currentDate()}.png`;
-    cmd.reply({
-      files: [{ attachment: canvas.toBuffer(), name: filename }],
-      ephemeral: true
+    cmd.editReply({
+      files: [{ attachment: canvas.toBuffer(), name: filename }]
     });
   }
 };
