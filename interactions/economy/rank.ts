@@ -17,6 +17,7 @@ module.exports = {
     const member = options.getMember('멤버') ?? cmd.member;
     if (!member || !(member instanceof GuildMember)) return cmd.na();
 
+    await cmd.deferReply({ephemeral: true});
     let info = await Xp.getInfo(member.id);
     let canvas = await RankFrame.createRankFrame(member, info.xp, info.rank);
     let filename = `${member.id}_${Util.currentDate()}.png`;
