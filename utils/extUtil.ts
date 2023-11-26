@@ -25,7 +25,7 @@ declare module 'discord.js' {
 
 declare module 'canvas' {
   interface CanvasRenderingContext2D {
-    style(style?: { fill: string, stroke?: string, thickness?: number, font?: string }): void;
+    style(style?: { fill?: string, stroke?: string, thickness?: number, font?: string }): void;
   }
 }
 
