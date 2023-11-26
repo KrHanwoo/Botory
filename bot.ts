@@ -4,6 +4,8 @@ import fs from 'fs';
 import { ExtUtil } from './utils/extUtil';
 import { Util } from './utils/util';
 import { Database } from './utils/database';
+import { Money } from './utils/money';
+import { Xp } from './utils/xp';
 
 const client = new Discord.Client({
   intents: [
@@ -34,4 +36,7 @@ fs.readdirSync('./events').filter(Util.isScript).forEach(f => {
   console.log('Connected to Database');
   await client.login(config.token);
   console.log(`Logged as ${Bot.client.user?.username}`);
+  
+  Xp.init();
+  Money.init();
 })();
