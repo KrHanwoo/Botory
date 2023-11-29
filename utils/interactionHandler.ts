@@ -2,6 +2,7 @@ import fs from 'fs';
 import { Bot } from '../bot';
 import path from 'path';
 import { Util } from './util';
+import { REST, Routes } from 'discord.js';
 
 const map = new Map();
 
@@ -9,10 +10,7 @@ export class InteractionHandler {
 
   static async init() {
     console.log('Registering commands');
-    const commands = Bot.client.application?.commands;
-    if (!commands) throw Error('Failed to get command manager');
-
-    let cache = await commands.fetch();
+    let commands = [];
 
     for (let f of getFiles('interactions')) {
       if (!Util.isScript(f)) continue;
@@ -20,24 +18,18 @@ export class InteractionHandler {
       let fn = interaction.execute;
       let data = interaction.data;
       if (data) {
-        let cmd = await commands.create(data);
         map.set(data.name, fn);
-        cache.delete(cmd.id);
+        commands.push(data.toJSON());
       } else map.set(interaction.id, fn);
     }
 
-    for (let c of cache.values()) {
-      await c.delete();
-    }
-
+    const rest = new REST().setToken(Bot.config.token);
+    await rest.put(Routes.applicationCommands(Bot.config.clientId), {body: commands});
+    
     Bot.client.on('interactionCreate', async (interaction: any) => {
       let key = interaction.commandName ?? interaction.customId;
       let fn = map.get(key);
-      try{
-        if (fn) fn(interaction);
-      }catch(e){
-        
-      }
+      fn(interaction);
     });
 
     console.log('Commands registerd');
