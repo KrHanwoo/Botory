@@ -1,5 +1,5 @@
-import { Collection, Document } from "mongodb";
-import { Database } from "./database";
+import { Collection, Document } from 'mongodb';
+import { Database } from './database';
 
 
 let storage: Collection<Document>;

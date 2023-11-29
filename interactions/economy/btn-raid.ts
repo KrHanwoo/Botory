@@ -1,5 +1,5 @@
-import { GuildMember, MessageComponentInteraction } from "discord.js";
-import { Raid } from "../../features/raid";
+import { GuildMember, MessageComponentInteraction } from 'discord.js';
+import { Raid } from '../../features/raid';
 
 
 module.exports = {

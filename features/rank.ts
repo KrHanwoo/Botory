@@ -1,12 +1,12 @@
-import { RankFrame } from "../utils/rankFrame";
-import { BotCache } from "../utils/botCache";
-import { Util } from "../utils/util";
-import { Money } from "../utils/money";
-import { Bot } from "../bot";
-import { Document, WithId } from "mongodb";
-import { Xp } from "../utils/xp";
-import { Collection, Message } from "discord.js";
-import { Canvas } from "canvas";
+import { RankFrame } from '../utils/rankFrame';
+import { BotCache } from '../utils/botCache';
+import { Util } from '../utils/util';
+import { Money } from '../utils/money';
+import { Bot } from '../bot';
+import { Document, WithId } from 'mongodb';
+import { Xp } from '../utils/xp';
+import { Collection, Message } from 'discord.js';
+import { Canvas } from 'canvas';
 
 export class Rank {
 

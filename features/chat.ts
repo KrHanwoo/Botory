@@ -1,5 +1,5 @@
-import { Money } from "../utils/money";
-import { Xp } from "../utils/xp";
+import { Money } from '../utils/money';
+import { Xp } from '../utils/xp';
 
 let map = new Map<string, number>();
 

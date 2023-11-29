@@ -1,4 +1,4 @@
-import { Image } from "canvas";
+import { Image } from 'canvas';
 
 const lookup = [
   { value: 1, symbol: '' },

@@ -1,9 +1,9 @@
-import { createCanvas } from "canvas";
-import { Util } from "./util";
-import { GuildMember } from "discord.js";
-import { BotCache } from "./botCache";
-import { Document, WithId } from "mongodb";
-import { Xp } from "./xp";
+import { createCanvas } from 'canvas';
+import { Util } from './util';
+import { GuildMember } from 'discord.js';
+import { BotCache } from './botCache';
+import { Document, WithId } from 'mongodb';
+import { Xp } from './xp';
 
 const font = 'Pretendard';
 
