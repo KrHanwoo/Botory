@@ -30,6 +30,9 @@ fs.readdirSync('./events').filter(Util.isScript).forEach(f => {
   client.on(event.event, (...args) => event.execute(...args));
 });
 
+process.on('uncaughtException', () => {
+});
+
 (async () => {
   console.log(new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }));
   await Database.init();
