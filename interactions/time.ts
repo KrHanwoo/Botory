@@ -3,7 +3,8 @@ import { ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from '
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('time')
-    .setDescription('시간 확인'),
+    .setDescription('시간 확인')
+    .setDMPermission(false),
   async execute(cmd: ChatInputCommandInteraction) {
     let embed = new EmbedBuilder()
       .addField(getTime('KST', 9), '한국 표준시')

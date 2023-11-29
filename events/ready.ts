@@ -1,3 +1,4 @@
+import { Bot } from '../bot.js';
 import { Raid } from '../features/raid.js';
 import { Rank } from '../features/rank.js';
 import { BotCache } from '../utils/botCache.js';
