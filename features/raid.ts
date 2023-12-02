@@ -1,13 +1,8 @@
-import { Collection, Document } from 'mongodb';
 import { BotCache } from '../utils/botCache';
 import { Database } from '../utils/database';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, escapeMarkdown } from 'discord.js';
 import { Util } from '../utils/util';
 import { Money } from '../utils/money';
-
-const lastRaidField = { lastRaid: { $exists: true } };
-
-let storage: Collection<Document>;
 
 export class Raid {
   static running = false;
@@ -15,7 +10,6 @@ export class Raid {
   static raiders: GuildMember[] = [];
 
   static async init() {
-    storage = Database.get('raid');
     setInterval(checkRaid, 180 * 1000);
   }
 
@@ -35,9 +29,9 @@ export class Raid {
   }
 
   static async calculatePrize() {
-    let doc = await storage.findOne({ lastRaid: { $exists: true } });
-    if (!doc || !doc.lastRaid) return 2000;
-    let diff = (Date.now() - doc.lastRaid) / 1000 / 3600;
+    let lastRaid = await Database.getStorage('lastRaid');
+    if (!lastRaid) return 2000;
+    let diff = (Date.now() - lastRaid) / 1000 / 3600;
     return Math.max(Math.floor(diff * 4000), 2000);
   }
 }
@@ -105,5 +99,5 @@ function joinRaiders(raiders: GuildMember[]) {
 }
 
 async function setLastRaid() {
-  await storage.replaceOne(lastRaidField, { lastRaid: Date.now() }, { upsert: true });
+  await Database.setStorage('lastRaid', Date.now());
 }

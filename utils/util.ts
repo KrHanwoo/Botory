@@ -1,4 +1,6 @@
 import { Image } from 'canvas';
+import { ActivityType } from 'discord.js';
+import { Bot } from '../bot';
 
 const lookup = [
   { value: 1, symbol: '' },
@@ -42,5 +44,14 @@ export class Util {
       img.src = url;
     });
     return img;
+  }
+
+  static async setStatus(status?: string | null, activity?: string | null) {
+    const user = Bot.client.user;
+    if (!user) return;
+    if (status) user.setStatus(status as any);
+    else user.setStatus('online');
+    if (activity) user.setActivity(activity, { type: ActivityType.Custom });
+    else user.setActivity();
   }
 }
