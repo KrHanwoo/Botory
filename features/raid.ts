@@ -3,6 +3,7 @@ import { Database } from '../utils/database';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, GuildMember, Message, escapeMarkdown } from 'discord.js';
 import { Util } from '../utils/util';
 import { Money } from '../utils/money';
+import { Rank } from './rank';
 
 export class Raid {
   static running = false;
@@ -37,8 +38,8 @@ export class Raid {
 }
 
 async function checkRaid() {
-  if (Math.random() >= 0.1) return;
-  if (BotCache.general.lastMessage?.author.isSelf()) return;
+  if (BotCache.general.lastMessage?.author?.isSelf()) return;
+  if (Math.random() >= 0.1) return Rank.attemptUpdate(false);
   let prize = await Raid.calculatePrize();
   Raid.startRaid(prize);
 }
@@ -89,9 +90,11 @@ async function endRaid(prize: number) {
   Raid.msg?.edit({ embeds: [embed], components: [] });
   Raid.msg = null;
   Raid.raiders = [];
-  rewards.forEach((v, k) => {
-    Money.addMoney(k, v);
-  });
+  for (let reward of rewards) {
+    await Money.addMoney(reward[0], reward[1]);
+  }
+  if (prize > 2000) Rank.attemptUpdate(true);
+  else Rank.attemptUpdate(false);
 }
 
 function joinRaiders(raiders: GuildMember[]) {

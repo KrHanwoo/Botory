@@ -10,8 +10,6 @@ export class Chat{
     Money.addMoney(id, 50);
     Xp.addXp(id, 20);
   }
-
-  
 }
 
 function check(id: string){

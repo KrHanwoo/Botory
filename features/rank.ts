@@ -8,15 +8,24 @@ import { Xp } from '../utils/xp';
 import { Collection, Message } from 'discord.js';
 import { Canvas } from 'canvas';
 
+let lastUpdate: number;
+
 export class Rank {
 
   static async init() {
     updateRank();
-    setInterval(updateRank, 60 * 5 * 1000);
+  }
+
+  static attemptUpdate(force: boolean){
+    if(force || !lastUpdate)return updateRank();
+    if(Date.now() < lastUpdate + 1000 * 60 * 15)return;
+    updateRank();
   }
 }
 
 async function updateRank() {
+  lastUpdate = Date.now();
+
   let messages = await BotCache.rank.messages.fetch({ limit: 5 });
   let moneyRankings = await Money.getRankings();
   let xpRankings = await Xp.getRankings();
