@@ -15,6 +15,10 @@ export class Raid {
   }
 
   static async startRaid(prize: number, interaction?: ChatInputCommandInteraction) {
+    if (this.running) {
+      if (interaction) return interaction.deleteReply();
+      return;
+    }
     let embed = new EmbedBuilder()
       .setTitle('도토리 레이드 도착!')
       .setDescription(`15초 안에 아래 버튼을 눌러서 도토리 ${prize}개를 받으세요!`);
