@@ -21,7 +21,7 @@ export class Money {
   static async getInfo(id: string) {
     let docs = await storage.find().toArray();
     docs.sort((a, b) => b.money - a.money);
-    let idx = docs.findIndex(x => x.member == id);
+    let idx = docs.findIndex(x => x.id == id);
     let rank = (idx + 1) || (docs.length + 1);
     let money = idx == -1 ? 0 : docs[idx].money ?? 0;
     return { rank: rank, money: money };

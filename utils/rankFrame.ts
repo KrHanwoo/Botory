@@ -32,7 +32,7 @@ export class RankFrame {
     let i = 0;
     let memberManager = BotCache.guild.members;
     for (let r of rankings) {
-      let member = await memberManager.fetch(r.member);
+      let member = await memberManager.fetch(r.id);
       let frame = await RankFrame.createMoneyFrame(member, r.money, i + 1);
       ctx.drawImage(frame, i < 10 ? 0 : 1480, (i % 10) * 280);
       i++;
@@ -82,7 +82,7 @@ export class RankFrame {
     let i = 0;
     let memberManager = BotCache.guild.members;
     for (let r of rankings) {
-      let member = await memberManager.fetch(r.member);
+      let member = await memberManager.fetch(r.id);
       let frame = await RankFrame.createRankFrame(member, r.xp, i + 1);
       ctx.drawImage(frame, i < 10 ? 0 : 1480, (i % 10) * 280);
       i++;

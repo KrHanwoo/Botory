@@ -21,7 +21,7 @@ export class Xp {
   static async getInfo(id: string) {
     let docs = await storage.find().toArray();
     docs.sort((a, b) => b.xp - a.xp);
-    let idx = docs.findIndex(x => x.member == id);
+    let idx = docs.findIndex(x => x.id == id);
     let rank = (idx + 1) || (docs.length + 1);
     let xp = idx == -1 ? 0 : docs[idx].xp ?? 0;
     return { rank: rank, xp: xp };

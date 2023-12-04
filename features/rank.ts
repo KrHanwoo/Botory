@@ -56,7 +56,7 @@ async function processRoles(id: string, rankings: WithId<Document>[], limit: num
   for (let i = 0; i < limit; i++) {
     idx++;
     if (idx + 1 > rankings.length) return;
-    let memberId = rankings[idx].member;
+    let memberId = rankings[idx].id;
     if (excludeRole && excludeRole.members.some(x => x.id == memberId)) {
       i--;
       continue;
