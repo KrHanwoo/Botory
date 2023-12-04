@@ -11,11 +11,11 @@ export class Money {
   }
 
   static async addMoney(id: string, amount: number) {
-    return storage.updateOne({ member: id }, { $inc: { money: amount } }, { upsert: true });
+    return storage.updateOne({ id: id }, { $inc: { money: amount } }, { upsert: true });
   }
 
   static async getMoney(id: string) {
-    return (await storage.findOne({ member: id }))?.money ?? 0;
+    return (await storage.findOne({ id: id }))?.money ?? 0;
   }
 
   static async getInfo(id: string) {

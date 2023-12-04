@@ -11,11 +11,11 @@ export class Xp {
   }
 
   static async addXp(id: string, amount: number) {
-    return storage.updateOne({ member: id }, { $inc: { xp: amount } }, { upsert: true });
+    return storage.updateOne({ id: id }, { $inc: { xp: amount } }, { upsert: true });
   }
 
   static async getXp(id: string) {
-    return (await storage.findOne({ member: id }))?.xp ?? 0;
+    return (await storage.findOne({ id: id }))?.xp ?? 0;
   }
 
   static async getInfo(id: string) {
