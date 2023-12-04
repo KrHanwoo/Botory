@@ -14,6 +14,8 @@ const lookup = [
 const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
 
 export class Util {
+  static EMOJI_REGEX = /(:|<:|<a:)((\w{1,64}:\d*)|(\w{1,64}))(:|>)/g;
+  static MENTION_REGEX = /<[@#][!&]?[0-9]+>/g;
 
   static isScript(file: string) {
     return file.endsWith('.js');

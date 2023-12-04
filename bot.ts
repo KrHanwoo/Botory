@@ -30,7 +30,8 @@ fs.readdirSync('./events').filter(Util.isScript).forEach(f => {
   client.on(event.event, (...args) => event.execute(...args));
 });
 
-process.on('uncaughtException', () => {
+process.on('uncaughtException', (e) => {
+  console.log(e);
 });
 
 (async () => {
