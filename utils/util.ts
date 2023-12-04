@@ -1,5 +1,5 @@
 import { Image } from 'canvas';
-import { ActivityType } from 'discord.js';
+import { ActivityType, Message } from 'discord.js';
 import { Bot } from '../bot';
 
 const lookup = [
@@ -35,11 +35,11 @@ export class Util {
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0';
   }
 
-  static currentDate(){
+  static currentDate() {
     return new Date().toISOString().split('T')[0];
   }
 
-  static async getImage(url: string){
+  static async getImage(url: string) {
     let img = new Image();
     await new Promise(r => {
       img.onload = () => { r(null); };
@@ -55,5 +55,24 @@ export class Util {
     else user.setStatus('online');
     if (activity) user.setActivity(activity, { type: ActivityType.Custom });
     else user.setActivity();
+  }
+
+  static isTrashChat(msg: Message) {
+    if (!msg) return true;
+    if (msg.attachments.size > 0) return false;
+    const content = msg.content;
+    if (!content || content.length < 5) return true;
+    const stripped = content
+      .replaceAll(Util.EMOJI_REGEX, '')
+      .replaceAll(Util.MENTION_REGEX, '')
+      .replaceAll(/\s/g, '');
+    if (!stripped) return true;
+    const collapsed = stripped.replaceAll(/(.)\1+/gi, '');
+    let total = collapsed.length;
+    let kr = collapsed.match(/[가-힣]/g)?.length ?? 0;
+    let other = total - kr;
+    let score = kr * 2 + other;
+    if (score < 12) return true;
+    return false;
   }
 }

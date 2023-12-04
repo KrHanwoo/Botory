@@ -10,6 +10,6 @@ module.exports = {
     if (channel.isDMBased()) return;
     if (channel.parentId == Bot.config.channel.playgroundCategory) return;
 
-    Chat.chat(msg.author.id);
+    Chat.chat(msg);
   }
 };
