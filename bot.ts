@@ -32,6 +32,7 @@ fs.readdirSync('./events').filter(Util.isScript).forEach(f => {
 });
 
 process.on('uncaughtException', (e) => {
+  if (e.message == 'Unknown interaction') return;
   console.log(e);
 });
 
@@ -41,7 +42,7 @@ process.on('uncaughtException', (e) => {
   console.log('Connected to Database');
   await client.login(config.token);
   console.log(`Logged as ${Bot.client.user?.username}`);
-  
+
   Xp.init();
   Money.init();
 })();

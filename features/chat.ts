@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 import { Money } from '../utils/money';
 import { Xp } from '../utils/xp';
 import { Util } from '../utils/util';
+import { Raid } from './raid';
 
 let map = new Map<string, number>();
 
@@ -9,6 +10,7 @@ export class Chat {
 
   static async chat(msg: Message) {
     if (!msg) return;
+    if (!Util.isTrashChat(msg)) Raid.checkMessage();
     let id = msg.author.id;
     if (!check(id)) return;
     if (Util.isTrashChat(msg)) return;

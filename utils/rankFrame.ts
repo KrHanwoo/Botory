@@ -9,7 +9,7 @@ const font = 'Pretendard';
 
 export class RankFrame {
 
-  static async createMoneyFrame(member: GuildMember, money: number, rank: number) {
+  static async createMoneyFrame(member: GuildMember | null, money: number, rank: number) {
     const canvas = await createProfile(member, rank);
     const ctx = canvas.getContext('2d');
 
@@ -32,7 +32,7 @@ export class RankFrame {
     let i = 0;
     let memberManager = BotCache.guild.members;
     for (let r of rankings) {
-      let member = await memberManager.fetch(r.id);
+      let member = await memberManager.fetch(r.id).catch(() => null);
       let frame = await RankFrame.createMoneyFrame(member, r.money, i + 1);
       ctx.drawImage(frame, i < 10 ? 0 : 1480, (i % 10) * 280);
       i++;
@@ -40,7 +40,7 @@ export class RankFrame {
     return canvas;
   }
 
-  static async createRankFrame(member: GuildMember, xp: number, rank: number) {
+  static async createRankFrame(member: GuildMember | null, xp: number, rank: number) {
     let level = Xp.xpToLevel(xp);
     let prop = 1;
     if (level < 1000) prop = (xp - Xp.levelToXp(level)) / (Xp.calcRequiredXp(level));
@@ -82,7 +82,7 @@ export class RankFrame {
     let i = 0;
     let memberManager = BotCache.guild.members;
     for (let r of rankings) {
-      let member = await memberManager.fetch(r.id);
+      let member = await memberManager.fetch(r.id).catch(() => null);
       let frame = await RankFrame.createRankFrame(member, r.xp, i + 1);
       ctx.drawImage(frame, i < 10 ? 0 : 1480, (i % 10) * 280);
       i++;
@@ -105,9 +105,9 @@ function createBase() {
 }
 
 
-async function createProfile(member: GuildMember, rank: number) {
-  let name = member.displayName;
-  let avatar = member.displayAvatarURL({ extension: 'png', size: 128 });
+async function createProfile(member: GuildMember | null, rank: number) {
+  let name = member?.displayName || '???';
+  let avatar = member?.displayAvatarURL({ extension: 'png', size: 128 });
 
   const canvas = createBase();
   const ctx = canvas.getContext('2d');
@@ -132,13 +132,19 @@ async function createProfile(member: GuildMember, rank: number) {
   let shortName = name.length > 10 ? `${name.substring(0, 10)}...` : name;
   ctx.fillText(String(shortName), 450, 150);
 
-  let img = await Util.getImage(avatar);
-  ctx.style();
-  ctx.arc(360, 150, 60, 0, 2 * Math.PI);
-  ctx.save();
-  ctx.clip();
-  ctx.drawImage(img, 300, 90, 120, 120);
-  ctx.restore();
+  let img = avatar ? await Util.getImage(avatar) : null;
+  if(img){
+    ctx.style();
+    ctx.arc(360, 150, 60, 0, 2 * Math.PI);
+    ctx.save();
+    ctx.clip();
+    ctx.drawImage(img, 300, 90, 120, 120);
+    ctx.restore();
+  }else{
+    ctx.style({fill: '#414141'});
+    ctx.arc(360, 150, 60, 0, 2 * Math.PI);
+    ctx.fill();
+  }
 
   return canvas;
 }

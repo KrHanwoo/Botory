@@ -5,6 +5,10 @@ import { Util } from '../utils/util';
 import { Money } from '../utils/money';
 import { Rank } from './rank';
 
+const THRESHHOLD = 10;
+let count = 0;
+let chance = 0.1;
+
 export class Raid {
   static running = false;
   static msg: Message | null;
@@ -12,6 +16,11 @@ export class Raid {
 
   static async init() {
     setInterval(checkRaid, 180 * 1000);
+  }
+
+  static checkMessage() {
+    count++;
+    chance += 0.005;
   }
 
   static async startRaid(prize: number, interaction?: ChatInputCommandInteraction) {
@@ -37,13 +46,19 @@ export class Raid {
     let lastRaid = await Database.getStorage('lastRaid');
     if (!lastRaid) return 2000;
     let diff = (Date.now() - lastRaid) / 1000 / 3600;
-    return Math.max(Math.floor(diff * 4000), 2000);
+    let amount = Math.max(Math.floor(diff * 4000), 2000);
+    let limit = Math.max(3000, 2000 * (count - 10) + 3000);
+    return Math.min(amount, limit);
   }
 }
 
 async function checkRaid() {
+  if (count < THRESHHOLD && Math.random() >= 0.05) {
+    chance += 0.0025;
+    return Rank.attemptUpdate(false);
+  }
   if (BotCache.general.lastMessage?.author?.isSelf()) return;
-  if (Math.random() >= 0.1) return Rank.attemptUpdate(false);
+  if (Math.random() >= chance) return Rank.attemptUpdate(false);
   let prize = await Raid.calculatePrize();
   Raid.startRaid(prize);
 }
@@ -57,8 +72,7 @@ async function endRaid(prize: number) {
     if (prize < 4000) embed.setDescription(`아무도 도토리 ${prize}개를 획득하지 못하셨습니다!`);
     else embed.setDescription(`아무도 레이드를 성공하지 못했습니다!\n무려 ${prize}개짜리였는데!`);
     Raid.msg?.edit({ embeds: [embed], components: [] });
-    Raid.msg = null;
-    Raid.raiders = [];
+    resetRaid();
     return;
   }
 
@@ -92,8 +106,7 @@ async function endRaid(prize: number) {
   }
 
   Raid.msg?.edit({ embeds: [embed], components: [] });
-  Raid.msg = null;
-  Raid.raiders = [];
+  resetRaid();
   for (let reward of rewards) {
     await Money.addMoney(reward[0], reward[1]);
   }
@@ -107,4 +120,11 @@ function joinRaiders(raiders: GuildMember[]) {
 
 async function setLastRaid() {
   await Database.setStorage('lastRaid', Date.now());
+}
+
+function resetRaid() {
+  Raid.msg = null;
+  Raid.raiders = [];
+  count = 0;
+  chance = 0.1;
 }
