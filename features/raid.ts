@@ -47,13 +47,13 @@ export class Raid {
     if (!lastRaid) return 2000;
     let diff = (Date.now() - lastRaid) / 1000 / 3600;
     let amount = Math.max(Math.floor(diff * 4000), 2000);
-    let limit = Math.max(3000, 2000 * (count - 10) + 3000);
+    let limit = Math.max(2000, 2000 * (count - 10) + 3000);
     return Math.min(amount, limit);
   }
 }
 
 async function checkRaid() {
-  if (count < THRESHHOLD && Math.random() >= 0.05) {
+  if (count < THRESHHOLD) {
     chance += 0.0025;
     return Rank.attemptUpdate(false);
   }
