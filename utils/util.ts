@@ -1,6 +1,7 @@
 import { Image } from 'canvas';
-import { ActivityType, Message } from 'discord.js';
+import { ActivityType, Attachment, EmbedBuilder, Guild, GuildPremiumTier, Message } from 'discord.js';
 import { Bot } from '../bot';
+import { BotCache } from './botCache';
 
 const lookup = [
   { value: 1, symbol: '' },
@@ -74,5 +75,52 @@ export class Util {
     let score = kr * 2 + other;
     if (score < 12) return true;
     return false;
+  }
+
+  static getFileSizeLimit(guild: Guild) {
+    switch (guild.premiumTier) {
+      case GuildPremiumTier.Tier3:
+        return 104857600;
+      case GuildPremiumTier.Tier2:
+        return 52428800;
+      default:
+        return 8388608;
+    }
+  }
+
+  static bytesToSize(bytes: number) {
+    let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    if (bytes <= 1) return bytes + ' Byte';
+    let i = Math.floor(Math.log(bytes) / 10);
+    let s = i <= 0 ? '' : ` (${this.comma(bytes)} Bytes)`;
+    return (
+      this.comma(Math.round((bytes / Math.pow(1024, i)) * 100) / 100) +
+      ' ' +
+      sizes[i] +
+      s
+    );
+  }
+
+  static comma(x: number) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  static sendFile(attachment: Attachment, guild: Guild | null, embed: EmbedBuilder) {
+    if (!guild) return;
+    if (attachment.size > this.getFileSizeLimit(guild))
+      BotCache.log.send({
+        content: "(서버 첨부파일 제한 초과)",
+        embeds: [embed],
+      });
+    else
+      BotCache.log.send({
+        files: [{ attachment: attachment.url, name: attachment.name ?? 'file' }],
+        embeds: [embed],
+      }).catch(() => {
+        BotCache.log.send({
+          content: "(서버 첨부파일 제한 초과)",
+          embeds: [embed],
+        });
+      });
   }
 }

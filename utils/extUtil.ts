@@ -7,8 +7,10 @@ type optionalString = string | null | undefined;
 declare module 'discord.js' {
   interface EmbedBuilder {
     addField(name: optionalString, value: optionalString, inline?: boolean): EmbedBuilder;
+    fillField(key: string, value: string): EmbedBuilder;
     setUser(author: User, showTag?: boolean): EmbedBuilder;
     setGuild(guild: Guild): EmbedBuilder;
+    setID(id: Array<{ name: string, value: string }>): EmbedBuilder;
   }
 
   interface BaseInteraction {
@@ -43,6 +45,20 @@ export class ExtUtil {
       if (!name || !value) return this;
       return this.addFields({ name: name, value: value, inline: inline });
     };
+
+    EmbedBuilder.prototype.fillField = function (key: string, value: string): EmbedBuilder {
+      for (let i = 0; i < Math.ceil(value.length / 1024); i++)
+        this.addField(
+          key,
+          value.substring(i * 1024, i * 1024 + 1024)
+        );
+      return this;
+    }
+
+    EmbedBuilder.prototype.setID = function (id: Array<{ name: string, value: string }>): EmbedBuilder {
+      this.addField('ID', id.map(v => `${v.name}: \`${v.value}\``).join('\n'));
+      return this;
+    }
 
     BaseInteraction.prototype.success = async function (message: string, ephemeral: boolean = true) {
       return reply(this, message, ephemeral, 0x3c95ff);

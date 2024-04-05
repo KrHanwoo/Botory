@@ -16,9 +16,9 @@ export class Rank {
     updateRank();
   }
 
-  static attemptUpdate(force: boolean){
-    if(force || !lastUpdate)return updateRank();
-    if(Date.now() < lastUpdate + 1000 * 60 * 15)return;
+  static attemptUpdate(force: boolean) {
+    if (force || !lastUpdate) return updateRank();
+    if (Date.now() < lastUpdate + 1000 * 60 * 15) return;
     updateRank();
   }
 }
@@ -70,7 +70,8 @@ async function processRoles(id: string, rankings: WithId<Document>[], limit: num
     await pair[1].roles.remove(id).catch(() => null);
   }
   for (let mId of roleAdd) {
-    let member = await BotCache.guild.members.fetch(mId);
-    await member.roles.add(id).catch(() => null);
+    let member = await BotCache.guild.members.fetch(mId).catch(() => null);
+    if (member)
+      await member.roles.add(id).catch(() => null);
   }
 }

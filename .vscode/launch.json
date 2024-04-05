@@ -2,17 +2,17 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch",
       "type": "node",
       "request": "launch",
-      "name": "Start",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "program": "${workspaceFolder}/out/bot.js",
-      "outFiles": [
-        "${workspaceFolder}/**/*.js"
-      ],
-      "cwd": "${workspaceFolder}/out"
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
+
+      "args": ["bot.ts"],
+      
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": ["<node_internals>/**", "node_modules/**"]
     }
   ]
 }
