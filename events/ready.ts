@@ -1,9 +1,9 @@
-import { Raid } from '../features/raid.js';
-import { Rank } from '../features/rank.js';
-import { BotCache } from '../utils/botCache.js';
-import { Database } from '../utils/database.js';
-import { InteractionHandler } from '../utils/interactionHandler.js';
-import { Util } from '../utils/util.js';
+import { Raid } from '../features/raid';
+import { Rank } from '../features/rank';
+import { BotCache } from '../utils/botCache';
+import { Database } from '../utils/database';
+import { InteractionHandler } from '../utils/interactionHandler';
+import { Util } from '../utils/util';
 
 module.exports = {
   event: 'ready',

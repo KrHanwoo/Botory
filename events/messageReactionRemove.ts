@@ -1,5 +1,5 @@
 import { MessageReaction, User } from 'discord.js';
-import { Logger } from '../utils/logger.js';
+import { Logger } from '../utils/logger';
 
 module.exports = {
   event: 'messageReactionRemove',

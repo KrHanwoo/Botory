@@ -9,6 +9,7 @@
     "mongodb": "^6.3.0"
   },
   "devDependencies": {
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.4"
   }
 }

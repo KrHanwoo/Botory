@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
-import { Chat } from '../features/chat.js';
-import { Bot } from '../bot.js';
+import { Chat } from '../features/chat';
+import { Bot } from '../bot';
 
 module.exports = {
   event: 'messageCreate',

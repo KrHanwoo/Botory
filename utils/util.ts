@@ -19,7 +19,7 @@ export class Util {
   static MENTION_REGEX = /<[@#][!&]?[0-9]+>/g;
 
   static isScript(file: string) {
-    return file.endsWith('.js');
+    return file.endsWith('.ts');
   }
 
   static async delay(ms: number) {
